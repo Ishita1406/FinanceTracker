@@ -2,7 +2,7 @@ import React from "react";
 import Card2 from "../../assets/images/Card2.png";
 import { LuTrendingUpDown } from "react-icons/lu";
 
-const AuthLayout = ({ children }) => {
+const AuthLayout = ({ children }) => { 
   return (
     <div className="flex flex-row w-full h-screen">
       {/* Left side - form content */}
