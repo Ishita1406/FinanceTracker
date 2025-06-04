@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import incomeRouter from './backend/routes/income.route.js';
 import expenseRouter from './backend/routes/expense.route.js';
+import dashboardRouter from './backend/routes/dashboard.route.js';
 dotenv.config();
 
 const port = process.env.PORT;
@@ -30,6 +31,7 @@ app.use(cors());
 app.use('/backend/auth', userRouter);
 app.use('/backend/income', incomeRouter);
 app.use('/backend/expense', expenseRouter);
+app.use('/backend/dashboard', dashboardRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
