@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import AuthLayout from "../../components/layouts/AuthLayout";
 import { useNavigate, Link } from "react-router-dom";
 import Input from "../../components/Inputs/Input";
+import axiosInstance from "../../utils/axiosInstance";
 
 const SignUp = () => {
     const [profilePic, setProfilePic] = useState(null);
-    const [fullName, setFullName] = useState("");
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
@@ -20,7 +21,7 @@ const SignUp = () => {
     const handleSignUp = async (e) => {
         e.preventDefault();
         
-        if (!fullName) {
+        if (!name) {
             setError("Please enter your full name");
             return;
         }
@@ -34,7 +35,28 @@ const SignUp = () => {
         }
         
         setError(null);
-        // Add your signup logic here
+        try {
+            const response = await axiosInstance.post('backend/auth/signup', {
+                name,
+                email,
+                password,
+            });
+
+            if (response.data && response.data.error) {
+                setError(response.data.message);
+                return;
+            }
+
+            navigate('/login');
+        } catch (error) {
+            console.error("Signup Error:", error);
+            if (error.response && error.response.data && error.response.data.message) {
+                setError(error.response.data.message);
+            }
+            else {
+                setError('Something went wrong. Please try again later.');
+            }
+        }
     };
 
     const handleProfilePicChange = (e) => {
@@ -89,8 +111,8 @@ const SignUp = () => {
                     </div>
 
                     <Input
-                        value={fullName}
-                        onChange={({ target }) => setFullName(target.value)}
+                        value={name}
+                        onChange={({ target }) => setName(target.value)}
                         label="Full Name"
                         placeholder="John Doe"
                         type="text"

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AuthLayout from "../../components/layouts/AuthLayout";
 import { useNavigate, Link } from "react-router-dom";
 import Input from "../../components/Inputs/Input";
+import axiosInstance from "../../utils/axiosInstance";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -26,7 +27,25 @@ const Login = () => {
       return;
     }
     setError("");
-    // Add your login API call here
+    try {
+            const response = await axiosInstance.post('backend/auth/login', {
+                email,
+                password,
+            });
+
+            if (response.data && response.data.access_token) {
+                localStorage.setItem('access_token', response.data.access_token);
+                navigate('/dashboard');
+            }
+        } catch (error) {
+            console.log("Login Error:", error);
+            if (error.response && error.response.data && error.response.data.message) {
+                setError(error.response.data.message);
+            }
+            else {
+                setError('Something went wrong. Please try again later.');
+            }
+        }
   };
 
   return (
