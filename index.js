@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import userRouter from './backend/routes/user.route.js';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import incomeRouter from './backend/routes/income.route.js';
 dotenv.config();
 
 const port = process.env.PORT;
@@ -26,6 +27,7 @@ app.use(cors());
 
 
 app.use('/backend/auth', userRouter);
+app.use('/backend/income', incomeRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
