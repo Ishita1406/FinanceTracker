@@ -1,10 +1,11 @@
-// pages/SignUp.jsx
 import React, { useState } from "react";
 import AuthLayout from "../../components/layouts/AuthLayout";
 import { useNavigate, Link } from "react-router-dom";
 import Input from "../../components/Inputs/Input";
 import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
 import axiosInstance from "../../utils/axiosInstance";
+
+// this is the modified code for the SignUp component
 
 const SignUp = () => {
    const [profilePic, setProfilePic] = useState(null);
