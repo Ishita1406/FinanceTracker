@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AuthLayout from "../../components/layouts/AuthLayout";
 import { useNavigate, Link } from "react-router-dom";
 import Input from "../../components/Inputs/Input";
 import axiosInstance from "../../utils/axiosInstance";
+import { UserContext } from "../../contexts/UserContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const { updateUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   const validateEmail = (email) => {
@@ -18,6 +20,7 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+  
     if (!validateEmail(email)) {
       setError("Please enter a valid email address");
       return;
@@ -26,28 +29,39 @@ const Login = () => {
       setError("Please enter a password");
       return;
     }
+  
     setError("");
     try {
-            const response = await axiosInstance.post('backend/auth/login', {
-                email,
-                password,
-            });
-
-            if (response.data && response.data.access_token) {
-                localStorage.setItem('access_token', response.data.access_token);
-                navigate('/dashboard');
-            }
-        } catch (error) {
-            console.log("Login Error:", error);
-            if (error.response && error.response.data && error.response.data.message) {
-                setError(error.response.data.message);
-            }
-            else {
-                setError('Something went wrong. Please try again later.');
-            }
+      const response = await axiosInstance.post("backend/auth/login", {
+        email,
+        password,
+      });
+  
+      console.log("Login Response:", response.data); // Debugging
+  
+      if (response.data?.access_token) {
+        localStorage.setItem("access_token", response.data.access_token);
+        
+        if (!response.data.user) {
+          console.error("User data missing in response");
+          setError("Login failed - missing user data");
+          return;
         }
+  
+        updateUser({
+          id: response.data.user.id,
+          name: response.data.user.name,
+          email: response.data.user.email,
+          // Add other required user fields
+        });
+        
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      setError(error.response?.data?.message || "Login failed. Please try again.");
+    }
   };
-
   return (
     <AuthLayout>
       <div className="lg:w-[70%] h-3/4 md:h-full flex flex-col justify-center">

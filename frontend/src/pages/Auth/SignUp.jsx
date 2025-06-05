@@ -1,70 +1,81 @@
-import React, { useState } from "react";
+import React, { useState , useContext } from "react";
 import AuthLayout from "../../components/layouts/AuthLayout";
 import { useNavigate, Link } from "react-router-dom";
 import Input from "../../components/Inputs/Input";
 import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
 import axiosInstance from "../../utils/axiosInstance";
+import { UserContext } from "../../contexts/UserContext";
 
 // this is the modified code for the SignUp component
 // this is the change that sheza made
 const SignUp = () => {
-   const [profilePic, setProfilePic] = useState(null);
-   const [name, setName] = useState("");
-   const [email, setEmail] = useState("");
-   const [password, setPassword] = useState("");
-   const [error, setError] = useState(null);
-
-
-   const navigate = useNavigate();
-
-
-   const validateEmail = (email) => {
-       const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-       return re.test(email);
-   };
-
-
-   const handleSignUp = async (e) => {
-       e.preventDefault();
+    const [profilePic, setProfilePic] = useState(null);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState(null);
+  
+    const { updateUser } = useContext(UserContext);
+    const navigate = useNavigate();
+  
+    const validateEmail = (email) => {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    };
+  
+    const handleSignUp = async (e) => {
+      e.preventDefault();
       
-       if (!name) {
-           setError("Please enter your full name");
-           return;
-       }
-       if (!validateEmail(email)) {
-           setError("Please enter a valid email address");
-           return;
-       }
-       if (!password || password.length < 8) {
-           setError("Password must be at least 8 characters");
-           return;
-       }
+      if (!name) {
+        setError("Please enter your full name");
+        return;
+      }
+      if (!validateEmail(email)) {
+        setError("Please enter a valid email address");
+        return;
+      }
+      if (!password || password.length < 8) {
+        setError("Password must be at least 8 characters");
+        return;
+      }
       
-       setError(null);
-       try {
-            const response = await axiosInstance.post('backend/auth/signup', {
-                name,
-                email,
-                password,
-            });
-
-            if (response.data && response.data.error) {
-                setError(response.data.message);
-                return;
-            }
-
-            navigate('/login');
-        } catch (error) {
-            console.error("Signup Error:", error);
-            if (error.response && error.response.data && error.response.data.message) {
-                setError(error.response.data.message);
-            }
-            else {
-                setError('Something went wrong. Please try again later.');
-            }
+      setError(null);
+      try {
+        const response = await axiosInstance.post('backend/auth/signup', {
+          name,
+          email,
+          password,
+        });
+  
+  
+        if (response.data?.error) {
+          setError(response.data.message);
+          return;
         }
-   };
-
+  
+        if (response.data?.access_token) {
+          localStorage.setItem("access_token", response.data.access_token);
+          
+          // Properly structure user data - adjust according to your API response
+          updateUser({
+            id: response.data.user?.id || response.data.id,
+            name: response.data.user?.name || name, // Fallback to form data if needed
+            email: response.data.user?.email || email,
+            profilePic: response.data.user?.profilePic || null
+          });
+  
+          navigate('/dashboard'); // Changed from '/login' to '/dashboard'
+        } else {
+          setError("Signup successful but missing expected data");
+        }
+      } catch (error) {
+        console.error("Signup Error:", error);
+        setError(
+          error.response?.data?.message || 
+          'Something went wrong. Please try again later.'
+        );
+      }
+    };
 
    return (
        <AuthLayout>
