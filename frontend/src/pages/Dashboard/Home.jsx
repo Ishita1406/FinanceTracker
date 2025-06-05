@@ -8,6 +8,10 @@ import { IoMdCard } from "react-icons/io";
 import InfoCard from "../../components/Cards/InfoCard";
 import { addThousandsSeparator } from "../../utils/helper";
 import { LuHandCoins, LuWalletMinimal } from "react-icons/lu";
+import RecentTransactions from "../../components/Dashboard/RecentTransactions"; 
+
+
+
 
 const Home = () => {
   useUserAuth();
@@ -22,9 +26,9 @@ const Home = () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.get(
-        `${API_PATH5.DASHBOARD.GET_DATA}`
-      );
+      // const response = await axiosInstance.get(
+      //   `${API_PATH5.DASHBOARD.GET_DATA}`
+      // );
       if (response.data) {
         setDashboardData(response.data);
       }
