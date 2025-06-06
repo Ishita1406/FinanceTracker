@@ -3,7 +3,6 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useUserAuth } from "../../hooks/useUserAuth";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
-// import { API_PATH5 } from "../../utils/apiPaths";
 import { IoMdCard } from "react-icons/io";
 import InfoCard from "../../components/Cards/InfoCard";
 import { addThousandsSeparator } from "../../utils/helper";
@@ -26,10 +25,9 @@ const Home = () => {
     setLoading(true);
 
     try {
-      // const response = await axiosInstance.get(
-      //   `${API_PATH5.DASHBOARD.GET_DATA}`
-      // );
+      const response = await axiosInstance.get("/backend/dashboard/");
       if (response.data) {
+        console.log("Dashboard data fetched successfully:", response.data);
         setDashboardData(response.data);
       }
     } catch (error) {
