@@ -9,6 +9,8 @@ import { addThousandsSeparator } from "../../utils/helper";
 import { LuHandCoins, LuWalletMinimal } from "react-icons/lu";
 import RecentTransactions from "../../components/Dashboard/RecentTransactions"; 
 import FinanceOverview from "../../components/Dashboard/FinanceOverview";
+import ExpenseTransactions from "../../components/Dashboard/ExpenseTransactions";
+import Last30DaysExpenses from "../../components/Dashboard/Last30DaysExpenses";
 
 
 
@@ -28,7 +30,6 @@ const Home = () => {
     try {
       const response = await axiosInstance.get("/backend/dashboard/");
       if (response.data) {
-        console.log("Dashboard data fetched successfully:", response.data);
         setDashboardData(response.data);
       }
     } catch (error) {
@@ -42,6 +43,8 @@ const Home = () => {
     fetchDashboardData();
     return () => {};
   }, []);
+
+  
 
   return (
     <DashboardLayout activeMenu="Dashboard">
@@ -79,6 +82,16 @@ const Home = () => {
             totalBalance={dashboardData?.totalBalance || 0}
             totalIncome={dashboardData?.totalIncome || 0}
             totalExpense={dashboardData?.totalExpense || 0}  
+          />
+
+
+          <ExpenseTransactions 
+            transactions={dashboardData?.last30daysExpenses?.transactions || []}
+            onSeeMore={() => navigate("/expense")}
+          />
+
+          <Last30DaysExpenses 
+            data={dashboardData?.last30daysExpenses?.transactions || []}
           />
 
         </div>
