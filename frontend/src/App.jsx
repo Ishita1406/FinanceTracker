@@ -12,6 +12,7 @@ import Home from "./pages/Dashboard/Home";
 import Income from "./pages/Dashboard/Income";
 import Expense from "./pages/Dashboard/Expense";
 import UserProvider from "./contexts/UserContext";
+import { Toaster } from "react-hot-toast";
 const App = () => {
   return (
     <UserProvider>
@@ -29,6 +30,15 @@ const App = () => {
         </Routes>
       </Router>
     </div>
+
+    <Toaster 
+       toastOptions={{
+        className: "",
+        style: {
+          fontSize: '13px'
+        },
+      }}
+    />
     </UserProvider>
   );
 };
@@ -37,12 +47,12 @@ export default App;
 
 const Root = () => {
   //check is token is present in local storage
-  const isAuthenticated = !!localStorage.getItem("token");
+  // const isAuthenticated = !!localStorage.getItem("token");
 
-  //redirect to dashboard if authenticated ,otherwise login
-  return isAuthenticated ? (
-    <Navigate to="/dashboard" />
-  ) : (
-    <Navigate to="/login" />
-  );
+  // //redirect to dashboard if authenticated ,otherwise login
+  // return isAuthenticated ? (
+  //   <Navigate to="/dashboard" />
+  // ) : (
+  //   <Navigate to="/login" />
+  // );
 };
