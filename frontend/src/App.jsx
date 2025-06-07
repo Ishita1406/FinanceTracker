@@ -47,12 +47,12 @@ export default App;
 
 const Root = () => {
   //check is token is present in local storage
-  // const isAuthenticated = !!localStorage.getItem("token");
+  const isAuthenticated = !!localStorage.getItem("token");
 
-  // //redirect to dashboard if authenticated ,otherwise login
-  // return isAuthenticated ? (
-  //   <Navigate to="/dashboard" />
-  // ) : (
-  //   <Navigate to="/login" />
-  // );
+  //redirect to dashboard if authenticated ,otherwise login
+  return isAuthenticated ? (
+    <Navigate to="/dashboard" />
+  ) : (
+    <Navigate to="/login" />
+  );
 };

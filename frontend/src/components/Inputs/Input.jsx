@@ -11,7 +11,7 @@ const Input = ({ value, onChange, placeholder, label, type }) => {
   return (
     <div className="mb-4">
       {label && (
-        <label className="block text-[13px] text-slate-800 mb-1">{label}</label>
+        <label className="block text-[15px] text-slate-800 mb-2">{label}</label>
       )}
 
       <div className="relative">
@@ -20,7 +20,7 @@ const Input = ({ value, onChange, placeholder, label, type }) => {
             type === "password" ? (showPassword ? "text" : "password") : type
           }
           placeholder={placeholder}
-          className="w-full p-2 border border-gray-300 rounded-md pr-10 bg-transparent outline-none focus:border-primary text-xs"
+          className="w-full p-3 border border-gray-200 rounded-md pr-10 bg-transparent outline-none focus:border-primary text-sm"
           onChange={(e) => onChange(e)}
         />
 
