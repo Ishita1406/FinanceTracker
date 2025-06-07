@@ -1,4 +1,5 @@
 import Expense from "../models/expense.model.js";
+import xlsx from "xlsx";
 
 export const addExpense = async (req, res) => {
     const userId = req.user._id;
@@ -42,14 +43,15 @@ export const deleteExpense = async (req, res) => {
 }
 
 export const downloadExpenseExcel = async (req, res) => {
-    const userId = req.user.id;
+    const userId = req.user._id;
     try {
         const expense = await Expense.find({ userId }).sort({ date: -1 });
 
         const data = expense.map((item) => ({
-            category: item.category,
-            amount: item.amount,
-            date: item.date,
+            Category: item.category,
+            Amount: item.amount.toString(),
+            Date: new Date(item.date).toLocaleDateString("en-IN")
+
         }));
 
         const wb = xlsx.utils.book_new();

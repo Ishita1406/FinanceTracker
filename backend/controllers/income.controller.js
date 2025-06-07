@@ -42,14 +42,14 @@ export const deleteIncome = async (req, res) => {
 }
 
 export const downloadIncomeExcel = async (req, res) => {
-    const userId = req.user.id;
+    const userId = req.user._id;
     try {
         const income = await Income.find({ userId }).sort({ date: -1 });
 
         const data = income.map((item) => ({
-            amount: item.amount,
-            source: item.source,
-            date: item.date,
+            Source: item.source,
+            Amount: item.amount.toString(),
+            Date: new Date(item.date).toLocaleDateString("en-IN")
         }));
 
         const wb = xlsx.utils.book_new();
