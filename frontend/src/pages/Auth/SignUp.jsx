@@ -6,8 +6,6 @@ import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
 import axiosInstance from "../../utils/axiosInstance";
 import { UserContext } from "../../contexts/UserContext";
 
-// this is the modified code for the SignUp component
-// this is the change that sheza made
 const SignUp = () => {
     const [profilePic, setProfilePic] = useState(null);
     const [name, setName] = useState("");
@@ -41,11 +39,19 @@ const SignUp = () => {
       
       setError(null);
       try {
-        const response = await axiosInstance.post('backend/auth/signup', {
-          name,
-          email,
-          password,
-        });
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("password", password);
+        if (profilePic) {
+          formData.append("profilePic", profilePic); // profilePic must be a File object
+        }
+
+        const response = await axiosInstance.post("backend/auth/signup", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
   
   
         if (response.data?.error) {

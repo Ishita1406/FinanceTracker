@@ -17,6 +17,8 @@ export const createUser = async (req, res) => {
         return res.status(400).json({ message: "Password is required!" });
     }
 
+    const profilePic = req.file?.path || "";
+
     const isUser = await User.findOne({ email });
     if (isUser) {
         return res.json({ 
@@ -26,12 +28,19 @@ export const createUser = async (req, res) => {
 
     const hashedPassword = await bcryptjs.hash(password, 10);
 
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({ name, email, password: hashedPassword, profilePic });
 
     await newUser.save();
 
+    const access_token = jwt.sign(
+            { _id: newUser._id, email: newUser.email },
+            process.env.JWT_SECRET,
+            { expiresIn: "36000m" }
+        );
+
     return res.json({
         error: false,
+        access_token,
         user: newUser,
         message: "User created successfully",
     });

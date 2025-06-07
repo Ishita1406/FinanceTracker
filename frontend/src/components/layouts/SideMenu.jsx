@@ -1,21 +1,20 @@
 import React, { useContext } from "react";
-
 import { SIDE_MENU_DATA } from "../../utils/data";
 import { UserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import CharAvatar from "../Cards/CharAvatar";
 
 const SideMenu = ({ activeMenu }) => {
-  const { user, clearUser } = useContext(UserContext);
+  const { user, clearUser } = useContext(UserContext);  
 
   const navigate = useNavigate();
 
-  const handleClick = (route) => {
-    if (route == "logout") {
-      handleLogout();
-      return;
-    }
-
-    navigate(route);
+  const handleClick = (item) => {
+    if (item.logout) {
+    handleLogout();
+  } else {
+    navigate(item.path);
+  }
   };
 
   const handleLogout = () => {
@@ -26,17 +25,17 @@ const SideMenu = ({ activeMenu }) => {
   return (
     <div className=" w-64 h-[calc(100vh-61px)] bg-white border-r border-gray-200/50 p-5 sticky top-[61px] z-20">
       <div className="flex flex-col items-center justify-center gap-3 mt-3 mb-7">
-        {!user?.profileImageUrl ? (
+        {user?.profilePic ? (
           <img
-            src={user?.profileImageUrl || ""}
+            src={user?.profilePic}
             alt="Profile Image"
             className="w-20 h-20 bg-slate-400 rounded-full"
           />
         ) : (
-          <CharAvatar name={user?.Name} width="w-20" height="h-20" style="text-xl" />
+          <CharAvatar name={user?.name} width="w-20" height="h-20" style="text-xl" />
         )}
 
-        <h5 className="text-gray-950 font-medium leading-6">
+        <h5 className="text-gray-800 font-medium leading-6">
           {user?.name || ""}
         </h5>
       </div>
@@ -49,7 +48,7 @@ const SideMenu = ({ activeMenu }) => {
               ? "text-white bg-primary"
               : "text-gray-600 hover:bg-gray-100"
           }`}
-          onClick={() => handleClick(item.path)}
+          onClick={() => handleClick(item)}
         >
           <item.icon className="text-xl" />
           {item.label}
