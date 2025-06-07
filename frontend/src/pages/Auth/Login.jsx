@@ -49,9 +49,10 @@ const Login = () => {
         }
   
         updateUser({
-          id: response.data.user.id,
+          id: response.data.user._id,
           name: response.data.user.name,
           email: response.data.user.email,
+          profilePic: response.data.user?.profilePic || null
           // Add other required user fields
         });
         
