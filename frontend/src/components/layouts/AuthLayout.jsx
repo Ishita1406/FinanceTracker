@@ -1,5 +1,5 @@
 import React from "react";
-import Card2 from "../../assets/images/Card2.png";
+import Card2 from "../../assets/images/Card2.jpeg";
 import { LuTrendingUpDown } from "react-icons/lu";
 
 const AuthLayout = ({ children }) => { 
@@ -32,7 +32,7 @@ const AuthLayout = ({ children }) => {
         {/* Card image */}
         <img
           src={Card2}
-          className="w-64 lg:w-[90%] absolute bottom-10 right-10 shadow-lg shadow-blue-400/15 z-10"
+          className="w-64 lg:w-[90%] absolute bottom-10 right-10 shadow-lg shadow-blue-400/15 z-10 rounded-xl"
           alt="Credit Card"
         />
       </div>
