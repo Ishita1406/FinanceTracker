@@ -10,7 +10,7 @@ COPY package*.json ./
 RUN npm install --omit=dev
 
 # Copy app source code
-COPY index.js ./
+COPY . .
 
 EXPOSE 5000
 
