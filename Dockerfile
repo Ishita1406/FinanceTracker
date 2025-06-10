@@ -11,7 +11,6 @@ RUN npm install --omit=dev
 
 # Copy app source code
 COPY index.js ./
-COPY .env ./
 
 EXPOSE 5000
 
